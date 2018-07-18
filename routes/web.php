@@ -12,16 +12,14 @@
 */
 
 $router->get('/', function () use ($router) {
-    return $router->app->version();
+	return $router->app->version();
 });
 $router->post('auth/login','AuthController@authenticate');
+$router->post('auth/register','AuthController@register');
 
-$router->group(
-    ['middleware' => 'jwt.auth'], 
-    function() use ($router) {
-        $router->get('users', function() {
-            $users = \App\User::all();
-            return response()->json($users);
-        });
-    }
-);
+$router->group(['middleware' => 'jwt.auth'], function() use ($router) {
+
+	$router->post('auth/otp','AuthController@validateOTP');
+	$router->get('profile','UserController@show');
+
+});

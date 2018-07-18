@@ -17,15 +17,16 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->string('noaccount');
             $table->string('fullname');
-            $table->integer('nik');
+            $table->integer('nik')->nullable();
             $table->string('email')->unique();
             $table->string('password');
             $table->string('phone');
             $table->string('photo')->nullable();
             $table->string('token')->default(0);
-            $table->integer('warning');
+            $table->integer('warning')->default(0);
             $table->enum('role', ['customer', 'dealer', 'sales', 'admin']);
-            $table->string('chalange_code')->nullable();
+            $table->string('challenge_code')->nullable();
+            $table->boolean('is_confirm')->default(0);
             $table->timestamps();
         });
     }

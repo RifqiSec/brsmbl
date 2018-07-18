@@ -9,7 +9,7 @@ class JwtMiddleware
 {
     public function handle($request, Closure $next, $guard = null)
     {
-        $token = $request->get('token');
+        $token = $request->header('token');
         
         if(!$token) {
             // Unauthorized response if token not there
@@ -29,7 +29,19 @@ class JwtMiddleware
             ], 400);
         }
         $user = User::find($credentials->sub);
-        // Now let's put the user in the request class so that you can grab it from there
+
+        if ($user->is_confirm == 0) {
+
+            $user->update(['challenge_code' => mt_rand(100000, 999999)]);
+
+            //sending sms
+            
+            return response()->json([
+                'status' => 'success',
+                'message' => 'OTP sent.',
+            ], 200);
+        }
+
         $request->auth = $user;
         return $next($request);
     }
