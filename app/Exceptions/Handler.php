@@ -7,6 +7,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Handler extends ExceptionHandler
@@ -45,6 +46,14 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        return parent::render($request, $exception);
-    }
+        // return parent::render($request, $exception);
+       $fe = FlattenException::create($exception);
+       $message = ($fe->getStatusCode() == 404) ? 'Sorry, the page you are looking for could not be found.' : $exception->getMessage();
+
+       return response()->json([
+        'status' => 'failed',
+        'message' => $message
+    ], $fe->getStatusCode());
+
+   }
 }

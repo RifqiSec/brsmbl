@@ -14,18 +14,21 @@ class JwtMiddleware
         if(!$token) {
             // Unauthorized response if token not there
             return response()->json([
-                'error' => 'Token not provided.'
+                'status' => 'failed',
+                'message' => 'Token not provided.'
             ], 401);
         }
         try {
             $credentials = JWT::decode($token, env('JWT_SECRET'), ['HS256']);
         } catch(ExpiredException $e) {
             return response()->json([
-                'error' => 'Provided token is expired.'
+                'status' => 'failed',
+                'message' => 'Provided token is expired.'
             ], 400);
         } catch(Exception $e) {
             return response()->json([
-                'error' => 'An error while decoding token.'
+                'status' => 'failed',
+                'message' => 'An error while decoding token.'
             ], 400);
         }
         $user = User::find($credentials->sub);
@@ -38,7 +41,7 @@ class JwtMiddleware
             
             return response()->json([
                 'status' => 'success',
-                'message' => 'OTP sent.',
+                'data' => 'This account has not active yet, please insert OTP code.',
             ], 200);
         }
 

@@ -20,6 +20,10 @@ $router->post('auth/register','AuthController@register');
 $router->group(['middleware' => 'jwt.auth'], function() use ($router) {
 
 	$router->post('auth/otp','AuthController@validateOTP');
-	$router->get('profile','UserController@show');
+	$router->get('profile','UserController@profile');
+	$router->get('user','UserController@index');
+	$router->get('user/{id}','UserController@show');
+	$router->post('user/{id}','UserController@update');
+	$router->delete('user/{id}','UserController@destroy');
 
 });

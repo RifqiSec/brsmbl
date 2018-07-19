@@ -58,7 +58,7 @@ class AuthController extends Controller
     	if (!$user) {
     		return response()->json([
     			'status' => 'failed',
-    			'error' => 'Email does not exist.'
+    			'message' => 'Email does not exist.'
     		], 400);
     	}
         // Verify the password and generate the token
@@ -71,7 +71,7 @@ class AuthController extends Controller
         // Bad Request response
     	return response()->json([
     		'status' => 'failed',
-    		'error' => 'Email or password is wrong.'
+    		'message' => 'Email or password is wrong.'
     	], 400);
     }
 
@@ -116,7 +116,7 @@ class AuthController extends Controller
 
     	return response()->json([
     		'status' => 'failed',
-    		'error' => 'OTP not match.'
+    		'message' => 'OTP not match.'
     	], 400);
     }
 
