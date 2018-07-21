@@ -17,6 +17,9 @@ $router->get('/', function () use ($router) {
 $router->post('auth/login','AuthController@authenticate');
 $router->post('auth/register','AuthController@register');
 
+$router->get('vehicle','VehicleController@index');
+$router->get('dealer','DealerController@index');
+
 $router->group(['middleware' => 'jwt.auth'], function() use ($router) {
 
 	$router->post('auth/otp','AuthController@validateOTP');

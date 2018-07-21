@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCityTable extends Migration
+class CreateDealerTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,14 @@ class CreateCityTable extends Migration
      */
     public function up()
     {
-        Schema::create('city', function (Blueprint $table) {
+        Schema::create('dealers', function (Blueprint $table) {
             $table->increments('id');
+            $table->enum('company_type', ['PT', 'CV']);
+            $table->string('name');
+            $table->string('trademark');
+            $table->text('address');
+            $table->integer('city_id');
+            $table->integer('user_id');
             $table->timestamps();
         });
     }
@@ -26,6 +32,6 @@ class CreateCityTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('city');
+        Schema::dropIfExists('dealer');
     }
 }
