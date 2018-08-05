@@ -37,7 +37,7 @@ class AuthController extends Controller
     		'iss' => "lumen-jwt", 
     		'sub' => $user->id, 
     		'iat' => time(), 
-    		'exp' => time() + 60*60 
+    		'exp' => time() + 100*100 
     	];
 
     	return JWT::encode($payload, env('JWT_SECRET'));
@@ -95,29 +95,70 @@ class AuthController extends Controller
     		'challenge_code' => mt_rand(100000, 999999)
     	]);
 
-    	//Send sms otp
 
-    	if($user) {
-    		return response()->json([
-    			'status' => 'success',
-    			'token' => $this->jwt($user)
-    		], 200);
-    	}
+        $this->sendOTP($user);
+
+        if($user) {
+            return response()->json([
+               'status' => 'success',
+               'token' => $this->jwt($user)
+           ], 200);
+        }
     }
 
     public function validateOTP(){
-    	if ($this->request->auth->challenge_code == $this->request->otp) {
+        if ($this->request->auth->challenge_code == $this->request->otp) {
 
-    		$this->request->auth->update(['is_confirm' => 1]);
-    		return response()->json([
-    			'status' => 'success'
-    		], 200);
-    	}
+            $this->request->auth->update(['is_confirm' => 1]);
+            return response()->json([
+               'status' => 'success'
+           ], 200);
+        }
 
-    	return response()->json([
-    		'status' => 'failed',
-    		'message' => 'OTP not match.'
-    	], 400);
+        return response()->json([
+          'status' => 'failed',
+          'message' => 'OTP not match.'
+      ], 400);
+    }
+
+    public function sendOTP($user)
+    {
+
+        $apikey      = '3a5c0626a7f7375228e48591e8317238'; 
+        $urlserver   = 'http://45.76.156.114/sms/api_sms_otp_send_json.php'; 
+        $callbackurl = ''; 
+        $senderid    = '0'; 
+        $senddata = array(
+            'apikey' => $apikey,  
+            'callbackurl' => $callbackurl, 
+            'senderid' => $senderid, 
+            'datapacket'=>array()
+        );
+
+        $number=$user->phone;
+        $message="Hi {$user->fullname}, OTP anda adalah {$user->challenge_code}";
+        array_push($senddata['datapacket'],array(
+            'number' => trim($number),
+            'message' => $message
+        ));
+
+        $data=json_encode($senddata);
+        $curlHandle = curl_init($urlserver);
+        curl_setopt($curlHandle, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($curlHandle, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curlHandle, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($data))
+        );
+        curl_setopt($curlHandle, CURLOPT_TIMEOUT, 30);
+        curl_setopt($curlHandle, CURLOPT_CONNECTTIMEOUT, 30);
+        $respon = curl_exec($curlHandle);
+
+        $http_code  = curl_getinfo($curlHandle, CURLINFO_HTTP_CODE);
+        curl_close($curlHandle);
+
+
     }
 
 }

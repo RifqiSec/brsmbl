@@ -26,9 +26,14 @@ class VehicleController extends Controller
     }
 
     public function index() {
+
+        $this->vehicle = $this->vehicle->with('type', 'brand');
+        if($this->request->has('type')) {
+            // $this->vehicle = $this->vehicle->type()->where('name', $this->request->type);
+        }
         return [
             'status' => 'success',
-            'data' => $this->vehicle->with('type', 'brand')->paginate(10)
+            'data' => $this->vehicle->paginate(10)
         ];
     }
 

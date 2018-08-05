@@ -29,4 +29,8 @@ $router->group(['middleware' => 'jwt.auth'], function() use ($router) {
 	$router->post('user/{id}','UserController@update');
 	$router->delete('user/{id}','UserController@destroy');
 
+
+	$router->get('inbox','InboxController@index');
+	$router->get('transaction','TransactionController@index');
+
 });
