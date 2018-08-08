@@ -18,6 +18,7 @@ $router->post('auth/login','AuthController@authenticate');
 $router->post('auth/register','AuthController@register');
 
 $router->get('vehicle','VehicleController@index');
+$router->get('search','SearchController@index');
 $router->get('dealer','DealerController@index');
 $router->get('dealer/{id}','DealerController@show');
 

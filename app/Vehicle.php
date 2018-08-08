@@ -24,4 +24,8 @@ class Vehicle extends Model
         return $this->belongsTo('App\VehicleBrand', 'vehicle_brand_id');
     }
 
+    public function dealer() {
+        return $this->belongsToMany('App\Dealer', 'dealer_vehicle');
+    }
+
 }
