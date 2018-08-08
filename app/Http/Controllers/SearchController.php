@@ -29,16 +29,16 @@ class SearchController extends Controller
 
     public function index() {
 
-        if($this->request->brand != '') {
+        if($this->request->get('brand') != '') {
             $this->vehicle = $this->vehicle->whereHas('brand', function ($query) {
-                $query->where('name', $this->request->brand);
+                $query->where('name', $this->request->get('brand'));
             });
         }
 
-        if($this->request->model != '') {
-            if ($this->request->model == 'automatic') {
+        if($this->request->get('model') != '') {
+            if ($this->request->get('model') == 'automatic') {
                 $model = 'A/T';
-            }elseif ($this->request->model == 'manual') {
+            }elseif ($this->request->get('model') == 'manual') {
                 $model = 'M/T';
             }else{
                 $model = 'hybird';
@@ -46,19 +46,19 @@ class SearchController extends Controller
             $this->vehicle = $this->vehicle->where('gear_box', $model);
         }
 
-        if($this->request->type != '') {
-            $this->vehicle = $this->vehicle->where('fuel', $this->request->type);
+        if($this->request->get('type') != '') {
+            $this->vehicle = $this->vehicle->where('fuel', $this->request->get('type'));
         }
 
-        if($this->request->area != '') {
+        if($this->request->get('area') != '') {
             $deler = $this->vehicle->whereHas('dealer.city', function ($query) {
-                $query->where('city_id', $this->request->area);
-            })->get();
+                $query->where('city_id', $this->request->get('area'));
+            });
 
             if ($deler->count() < 0) {
                 return [
                     'status' => 'failed',
-                    'message' => 'Tidak ada dealer yang tersedia'
+                    'message' => 'Tidak ada dealer yang tersedia.'
                 ];
             }
         }
