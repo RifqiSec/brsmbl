@@ -6,7 +6,7 @@ use Validator;
 use App\Inbox;
 use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
-class InboxController extends Controller 
+class SearchController extends Controller 
 {
     /**
      * The request instance.

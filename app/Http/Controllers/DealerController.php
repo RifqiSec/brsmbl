@@ -35,7 +35,7 @@ class DealerController extends Controller
     public function show($id) {
         return [
             'status' => 'success',
-            'data' => $this->dealer->findOrFail($id)
+            'data' => $this->dealer->with('user')->findOrFail($id)
         ];
     }
 

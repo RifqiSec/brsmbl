@@ -19,6 +19,7 @@ $router->post('auth/register','AuthController@register');
 
 $router->get('vehicle','VehicleController@index');
 $router->get('dealer','DealerController@index');
+$router->get('dealer/{id}','DealerController@show');
 
 $router->group(['middleware' => 'jwt.auth'], function() use ($router) {
 
@@ -31,6 +32,7 @@ $router->group(['middleware' => 'jwt.auth'], function() use ($router) {
 
 
 	$router->get('inbox','InboxController@index');
+	$router->post('inbox','InboxController@create');
 	$router->get('transaction','TransactionController@index');
 
 });
