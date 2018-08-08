@@ -1,15 +1,7 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It is a breeze. Simply tell Lumen the URIs it should respond to
-| and give it the Closure to call when that URI is requested.
-|
-*/
+use Illuminate\Http\Request;
+
 
 $router->get('/', function () use ($router) {
 	return $router->app->version();
@@ -20,7 +12,21 @@ $router->post('auth/register','AuthController@register');
 $router->get('vehicle','VehicleController@index');
 $router->get('search','SearchController@index');
 $router->get('dealer','DealerController@index');
-$router->get('dealer/{id}','DealerController@show');
+
+$router->get('city', function(Request $request) {
+	return [
+		'status' => 'success',
+		'data' => App\City::select('id', 'name')->where('name', 'like', '%'.$request->get('param').'%')->get()
+	];
+});
+
+$router->get('brand', function(Request $request) {
+	return [
+		'status' => 'success',
+		'data' => App\VehicleBrand::select('id', 'name')->where('name', 'like', '%'.$request->get('param').'%')->get()
+	];
+});
+
 
 $router->group(['middleware' => 'jwt.auth'], function() use ($router) {
 
