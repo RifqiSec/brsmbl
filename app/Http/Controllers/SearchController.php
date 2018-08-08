@@ -28,7 +28,8 @@ class SearchController extends Controller
     }
 
     public function index() {
-
+        $this->vehicle = $this->vehicle->has('dealer');
+        
         if($this->request->get('brand') != '') {
             $this->vehicle = $this->vehicle->whereHas('brand', function ($query) {
                 $query->where('name', $this->request->get('brand'));
@@ -50,22 +51,23 @@ class SearchController extends Controller
             $this->vehicle = $this->vehicle->where('fuel', $this->request->get('type'));
         }
 
+        if($this->request->get('min') != '') {
+            $this->vehicle = $this->vehicle->where('harga', '>=', $this->request->get('min'));
+        }
+
+        if($this->request->get('max') != '') {
+            $this->vehicle = $this->vehicle->where('harga', '<=', $this->request->get('max'));
+        }
+
         if($this->request->get('area') != '') {
-            $deler = $this->vehicle->whereHas('dealer.city', function ($query) {
+            $this->vehicle = $this->vehicle->whereHas('dealer.city', function ($query) {
                 $query->where('city_id', $this->request->get('area'));
             });
-
-            if ($deler->count() < 0) {
-                return [
-                    'status' => 'failed',
-                    'message' => 'Tidak ada dealer yang tersedia.'
-                ];
-            }
         }
 
         return [
             'status' => 'success',
-            'data' => $this->vehicle->select('name', 'harga', 'engine', 'gear_box', 'photo', 'vehicle_brand_id', 'vehicle_type_id')->with('type','brand', 'dealer')->paginate(10),
+            'data' => $this->vehicle->select('name', 'harga', 'engine', 'gear_box', 'photo', 'vehicle_brand_id', 'vehicle_type_id')->with('type','brand', 'dealer')->withCount('dealer')->paginate(10),
         ];
     }
 }
