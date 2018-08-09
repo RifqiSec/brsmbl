@@ -27,6 +27,21 @@ $router->get('brand', function(Request $request) {
 	];
 });
 
+$router->get('dealer', function(Request $request) {
+	return [
+		'status' => 'success',
+		'data' => App\Dealer::select('id', 'name', 'city_id')->with('city')->where('name', 'like', '%'.$request->get('param').'%')->get()->map(function($item) {
+			return [
+				'id' => $item->id,
+				'name' => $item->name,
+				'area' => $item->city->name,
+			];
+		})
+	];
+});
+
+$router->get('sales/{area}/{vehicle_id}','TransactionController@salesList');
+
 
 $router->group(['middleware' => 'jwt.auth'], function() use ($router) {
 
@@ -41,5 +56,7 @@ $router->group(['middleware' => 'jwt.auth'], function() use ($router) {
 	$router->get('inbox','InboxController@index');
 	$router->post('inbox','InboxController@create');
 	$router->get('transaction','TransactionController@index');
+	$router->post('sales/select','TransactionController@selectSales');
+
 
 });

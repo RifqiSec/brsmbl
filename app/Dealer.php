@@ -18,4 +18,14 @@ class Dealer extends Model
 		return $this->belongsTo('App\City');
 	}
 
+	public function vehicle()
+	{
+		return $this->belongsToMany('App\Vehicle');
+	}
+
+	public function sales()
+	{
+		return $this->belongsToMany('App\User', 'user_sales')->wherePivot('is_active', 1);
+	}
+
 }

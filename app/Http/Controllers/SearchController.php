@@ -29,7 +29,7 @@ class SearchController extends Controller
 
     public function index() {
         $this->vehicle = $this->vehicle->has('dealer');
-        
+
         if($this->request->get('brand') != '') {
             $this->vehicle = $this->vehicle->whereHas('brand', function ($query) {
                 $query->where('name', $this->request->get('brand'));
@@ -67,7 +67,7 @@ class SearchController extends Controller
 
         return [
             'status' => 'success',
-            'data' => $this->vehicle->select('name', 'harga', 'engine', 'gear_box', 'photo', 'vehicle_brand_id', 'vehicle_type_id')->with('type','brand', 'dealer')->withCount('dealer')->paginate(10),
+            'data' => $this->vehicle->select('id', 'name', 'harga', 'engine', 'gear_box', 'photo', 'vehicle_brand_id', 'vehicle_type_id')->with('type','brand', 'dealer')->withCount('dealer')->paginate(10),
         ];
     }
 }

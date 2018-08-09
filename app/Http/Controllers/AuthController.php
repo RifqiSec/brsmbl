@@ -95,6 +95,10 @@ class AuthController extends Controller
     		'challenge_code' => mt_rand(100000, 999999)
     	]);
 
+        if ($this->request->role == 'sales') {
+            $user->sales()->attach($this->request->dealer_id);
+        }
+
 
         $this->sendOTP($user);
 
