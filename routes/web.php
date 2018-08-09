@@ -32,7 +32,7 @@ $router->get('dealer', function(Request $request) {
 		'status' => 'success',
 		'data' => App\Dealer::select('id', 'name', 'city_id')
 		->with('city')
-		->where('name', 'like', '%'.$request->get('param').'%')
+		->where('name', 'like', '%'.$request->get('\\param').'%')
 		->get()
 		->map(function($item) {
 			return [
