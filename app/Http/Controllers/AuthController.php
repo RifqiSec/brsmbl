@@ -9,6 +9,7 @@ use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
 use Firebase\JWT\ExpiredException;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\DealerController as Dealer;
 class AuthController extends Controller 
 {
     /**
@@ -23,8 +24,9 @@ class AuthController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return void
      */
-    public function __construct(Request $request) {
-    	$this->request = $request;
+    public function __construct(Request $request, Dealer $dealer) {
+        $this->request = $request;
+        $this->dealer = $dealer;
     }
     /**
      * Create a new token.
@@ -97,6 +99,10 @@ class AuthController extends Controller
 
         if ($this->request->role == 'sales') {
             $user->sales()->attach($this->request->dealer_id);
+        }
+
+        if ($this->request->role == 'dealer') {
+            $dealer = $this->dealer->create($user);
         }
 
 

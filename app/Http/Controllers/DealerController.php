@@ -39,6 +39,28 @@ class DealerController extends Controller
         ];
     }
 
+     public function create($user) {
+
+        $this->validate($this->request, [
+            'company_type' => 'required',
+            'name' => 'required',
+            'trademark' => 'required',
+            'address' => 'required',
+            'city_id' => 'required',
+        ]);
+
+        $dealer = $this->dealer->create([
+            'company_type' => $this->request->company_type,
+            'name' => $this->request->name,
+            'trademark' => $this->request->trademark,
+            'address' => $this->request->address,
+            'city_id' => $this->request->city_id,
+            'user_id' => $user->id,
+        ]);
+
+        return $this->dealer;
+    }
+
     public function update($id) {
         $dealer = $this->dealer->findOrFail($id);
         try {
