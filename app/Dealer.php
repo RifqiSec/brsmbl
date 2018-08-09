@@ -28,4 +28,9 @@ class Dealer extends Model
 		return $this->belongsToMany('App\User', 'user_sales')->wherePivot('is_active', 1);
 	}
 
+	public function salesPending()
+	{
+		return $this->belongsToMany('App\User', 'user_sales')->wherePivot('is_active', 0);
+	}
+
 }

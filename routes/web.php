@@ -30,7 +30,11 @@ $router->get('brand', function(Request $request) {
 $router->get('dealer', function(Request $request) {
 	return [
 		'status' => 'success',
-		'data' => App\Dealer::select('id', 'name', 'city_id')->with('city')->where('name', 'like', '%'.$request->get('param').'%')->get()->map(function($item) {
+		'data' => App\Dealer::select('id', 'name', 'city_id')
+		->with('city')
+		->where('name', 'like', '%'.$request->get('param').'%')
+		->get()
+		->map(function($item) {
 			return [
 				'id' => $item->id,
 				'name' => $item->name,
@@ -57,6 +61,9 @@ $router->group(['middleware' => 'jwt.auth'], function() use ($router) {
 	$router->post('inbox','InboxController@create');
 	$router->get('transaction','TransactionController@index');
 	$router->post('sales/select','TransactionController@selectSales');
+
+
+	$router->get('sales/pending','DealerController@salesPending');
 
 
 });

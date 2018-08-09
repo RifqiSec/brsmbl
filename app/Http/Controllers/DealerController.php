@@ -96,4 +96,14 @@ class DealerController extends Controller
         ];
     }
 
+    public function salesPending() {
+        $dealer = $this->dealer
+        ->select('id', 'name')
+        ->where('user_id', $this->request->auth->id)
+        ->has('salesPending')->with('salesPending')
+        ->get();
+
+        return $dealer;
+    }
+
 }
