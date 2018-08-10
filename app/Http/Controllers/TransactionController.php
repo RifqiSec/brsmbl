@@ -83,7 +83,7 @@ class TransactionController extends Controller
         ->whereHas('sales', function ($q) {
             $q->where('token', '<=', 1);
         })
-        ->with('sales')->paginete(10);
+        ->with('sales')->paginate(10);
 
         return [
             'status' => 'success',
