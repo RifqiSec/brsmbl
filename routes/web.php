@@ -64,6 +64,7 @@ $router->group(['middleware' => 'jwt.auth'], function() use ($router) {
 
 
 	$router->get('sales/pending','DealerController@salesPending');
+	$router->post('sales/approve','DealerController@salesApprove');
 
 
 });

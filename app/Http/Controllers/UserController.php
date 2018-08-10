@@ -42,7 +42,23 @@ class UserController extends Controller
     public function update($id) {
         $user = $this->user->findOrFail($id);
         try {
-            $user->update($this->request->only(['fullname', 'email', 'nik', 'noaccount', 'phone', 'photo', 'warning', 'token', 'role']));
+            if ($this->request->file('photo')->isValid()) {
+                $filename = date("dmyhis").$this->request->file('photo')->getClientOriginalName();
+                $this->request->file('photo')
+                ->move(base_path('public/avatar'), $filename);
+            }else{
+                $filename = $user->photo;
+            }
+            $update = [
+                'fullname' => $this->request->post('fullname'),
+                'email' => $this->request->post('email'),
+                'nik' => $this->request->post('nik'),
+                'phone' => $this->request->post('phone'),
+                'photo' => $filename,
+                'warning' => $this->request->post('warning'),
+                'token' => $this->request->post('token')
+            ];
+            $user->update($update);
         } catch (Exception $e) {
             return [
                 'status' => 'failed',

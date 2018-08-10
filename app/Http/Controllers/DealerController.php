@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Validator;
 use App\Dealer;
+use App\User;
 use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
 class DealerController extends Controller 
@@ -20,9 +21,10 @@ class DealerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return void
      */
-    public function __construct(Request $request, Dealer $dealer) {
+    public function __construct(Request $request, Dealer $dealer, User $user) {
         $this->request = $request;
         $this->dealer = $dealer;
+        $this->user = $user;
     }
 
     public function index() {
@@ -103,7 +105,22 @@ class DealerController extends Controller
         ->has('salesPending')->with('salesPending')
         ->get();
 
-        return $dealer;
+        return [
+            'status' => 'success',
+            'data' => $dealer
+        ];
+    }
+
+    public function salesApprove() {
+        $sales = $this->user->with('sales')
+        ->findOrFail($this->request->sales_pending_id);
+
+        $sales->sales()->updateExistingPivot($this->request->dealer_id, ['is_active' => 1]);
+
+        return [
+            'status' => 'success',
+            'message' => 'Sales has been approved.'
+        ];
     }
 
 }
