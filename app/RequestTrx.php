@@ -17,4 +17,19 @@ class RequestTrx extends Model
 	{
 		return $this->belongsTo('App\Vehicle');
 	}
+
+	public function sales()
+	{
+		return $this->belongsToMany('App\User', 'selected_sales', 'request_id', 'sales_id');
+	}
+
+	public function user()
+	{
+		return $this->belongsTo('App\User');
+	}
+
+	public function city()
+	{
+		return $this->belongsTo('App\City');
+	}
 }

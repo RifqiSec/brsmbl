@@ -30,6 +30,10 @@ class TransactionController extends Controller
     }
 
     public function index() {
+
+        if ($this->request->auth->role == 'sales') 
+            return $this->userRequestList();
+
         return [
             'status' => 'success',
             'data' => $this->offer->with('request', 'request.vehicle.brand', 'sales', 'dealer')
@@ -37,6 +41,27 @@ class TransactionController extends Controller
                 $query->where('user_id', $this->request->auth->id);
             })->paginate(10)
         ];
+    }
+
+    public function userRequestList(){
+        return 
+        $this->requestTrx
+        ->whereHas('sales', function ($q) {
+            $q->where('sales_id', $this->request->auth->id);
+            $q->where('is_offered', 0);
+        })
+        ->with([
+            'user'=>function($query){
+                $query->select('id','fullname', 'photo');
+            }
+        ])
+        ->with('city')
+        ->get();
+    }
+
+    public function offering()
+    {
+        # code...
     }
 
     public function show($id) {

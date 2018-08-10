@@ -49,7 +49,7 @@ class UserController extends Controller
         ]);
         try {
             if ($this->request->file('photo')->isValid()) {
-                $filename = date("dmyhis").$this->request->file('photo')->getClientOriginalName();
+                $filename = url('avatar').'/'.date("dmyhis").$this->request->file('photo')->getClientOriginalName();
                 $this->request->file('photo')
                 ->move(base_path('public/avatar'), $filename);
             }else{
