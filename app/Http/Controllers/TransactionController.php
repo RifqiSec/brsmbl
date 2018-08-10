@@ -32,18 +32,21 @@ class TransactionController extends Controller
     public function index() {
 
         if ($this->request->auth->role == 'sales') 
+            return $this->salesRequestList();
+         if ($this->request->auth->role == 'customer') 
             return $this->userRequestList();
-
-        return [
-            'status' => 'success',
-            'data' => $this->offer->with('request', 'request.vehicle.brand', 'sales', 'dealer')
-            ->whereHas('request', function($query) {
-                $query->where('user_id', $this->request->auth->id);
-            })->paginate(10)
-        ];
+        
     }
 
     public function userRequestList(){
+        return [
+            'status' => 'success',
+            'data' => $this->requestTrx->with('vehicle.brand', 'offers')
+            ->paginate(10)
+        ];
+    }
+
+    public function salesRequestList(){
         $request = $this->requestTrx
         ->whereHas('sales', function ($q) {
             $q->where('sales_id', $this->request->auth->id);
