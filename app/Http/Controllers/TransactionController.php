@@ -65,7 +65,7 @@ class TransactionController extends Controller
             }
         ])
         ->with('city')
-        ->get();
+        ->paginate(10);
 
         return [
             'status' => 'success',
