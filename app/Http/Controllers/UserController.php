@@ -41,6 +41,12 @@ class UserController extends Controller
 
     public function update($id) {
         $user = $this->user->findOrFail($id);
+        $this->validate($this->request, [
+            'email'     => 'required|email',
+            'nik'  => 'required',
+            'fullname'  => 'required',
+            'phone'  => 'required',
+        ]);
         try {
             if ($this->request->file('photo')->isValid()) {
                 $filename = date("dmyhis").$this->request->file('photo')->getClientOriginalName();
@@ -55,8 +61,6 @@ class UserController extends Controller
                 'nik' => $this->request->post('nik'),
                 'phone' => $this->request->post('phone'),
                 'photo' => $filename,
-                'warning' => $this->request->post('warning'),
-                'token' => $this->request->post('token')
             ];
             $user->update($update);
         } catch (Exception $e) {
