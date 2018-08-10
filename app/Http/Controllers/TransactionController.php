@@ -44,8 +44,7 @@ class TransactionController extends Controller
     }
 
     public function userRequestList(){
-        return 
-        $this->requestTrx
+        $request = $this->requestTrx
         ->whereHas('sales', function ($q) {
             $q->where('sales_id', $this->request->auth->id);
             $q->where('is_offered', 0);
@@ -57,6 +56,11 @@ class TransactionController extends Controller
         ])
         ->with('city')
         ->get();
+
+        return [
+            'status' => 'success',
+            'data' => $request
+        ];
     }
 
     public function offering()
