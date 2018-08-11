@@ -67,4 +67,8 @@ $router->group(['middleware' => 'jwt.auth'], function() use ($router) {
 	$router->post('sales/approve','DealerController@salesApprove');
 
 
+	$router->get('token/history','TokenController@index');
+	$router->get('payment/history','PaymentController@index');
+
+
 });

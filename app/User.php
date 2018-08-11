@@ -40,4 +40,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         return $this->hasMany('App\Dealer');
     }
+
+    public function tokenHistory()
+    {
+        return $this->hasMany('App\TokenHistory');
+    }
 }
