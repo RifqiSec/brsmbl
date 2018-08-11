@@ -76,6 +76,7 @@ $router->group(['middleware' => 'jwt.auth'], function() use ($router) {
 	$router->get('sales','DealerController@salesList');
 
 	$router->get('dealer/vehicle','DealerController@vehicleList');
+	$router->post('dealer/vehicle','DealerController@addVehicle');
 
 
 });

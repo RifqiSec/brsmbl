@@ -53,6 +53,15 @@ class DealerController extends Controller
         
     }
 
+    public function addVehicle(){
+        $dealer = $this->dealer->where('user_id', $this->request->auth->id)->first();
+        $dealer->vehicle()->attach($this->request->vehicle_id);
+         return [
+            'status' => 'success',
+            'data' => ''
+        ];
+    }
+
     public function salesList($is_approved = 1){
         $dealerId = $this->dealer->where('user_id', $this->request->auth->id)->first()->id;
         return [
