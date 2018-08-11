@@ -43,7 +43,6 @@ class UserController extends Controller
         $user = $this->user->findOrFail($id);
         $this->validate($this->request, [
             'email'     => 'required|email',
-            'nik'  => 'required',
             'fullname'  => 'required',
             'phone'  => 'required',
         ]);

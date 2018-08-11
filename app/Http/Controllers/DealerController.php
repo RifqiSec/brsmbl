@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Validator;
 use App\Dealer;
 use App\User;
+use App\Vehicle;
 use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
 class DealerController extends Controller 
@@ -21,10 +22,11 @@ class DealerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return void
      */
-    public function __construct(Request $request, Dealer $dealer, User $user) {
+    public function __construct(Request $request, Dealer $dealer, Vehicle $vehicle, User $user) {
         $this->request = $request;
         $this->dealer = $dealer;
         $this->user = $user;
+        $this->vehicle = $vehicle;
     }
 
     public function index() {
@@ -41,7 +43,17 @@ class DealerController extends Controller
         ];
     }
 
-     public function create($user) {
+    public function vehicleList(){
+        return [
+            'status' => 'success',
+            'data' => $this->vehicle->whereHas('dealer', function($q) {
+                $q->where('user_id', $this->request->auth->id);
+            })->paginate(10)
+        ];
+        
+    }
+
+    public function create($user) {
 
         $this->validate($this->request, [
             'company_type' => 'required',
