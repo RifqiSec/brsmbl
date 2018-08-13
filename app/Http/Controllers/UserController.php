@@ -94,7 +94,7 @@ class UserController extends Controller
     }
 
     public function profile() {
-        $user = $this->request->auth;
+        $user = $this->user->with('sales', 'dealer')->findOrFail($this->request->auth->id);
         return [
             'status' => 'success',
             'data' => $user
