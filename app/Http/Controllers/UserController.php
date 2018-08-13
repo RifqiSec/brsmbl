@@ -47,10 +47,8 @@ class UserController extends Controller
             'phone'  => 'required',
         ]);
         try {
-            if ($this->request->file('photo')->isValid()) {
-                $filename = url('avatar').'/'.date("dmyhis").$this->request->file('photo')->getClientOriginalName();
-                $this->request->file('photo')
-                ->move(base_path('public/avatar'), $filename);
+            if ($this->request->has('photo')) {
+                $filename = $this->request->photo;
             }else{
                 $filename = $user->photo;
             }
