@@ -92,7 +92,8 @@ class AuthController extends Controller
     		'password' => Hash::make($this->request->password),
     		'fullname' => $this->request->fullname,
     		'phone' => $this->request->phone,
-    		'role' => $this->request->role,
+            'role' => $this->request->role,
+            'nik' => ($this->request->has('nik')) ? $this->request->nik : '',
     		'noaccount' => '-',
     		'challenge_code' => mt_rand(100000, 999999)
     	]);

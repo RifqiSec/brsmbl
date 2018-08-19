@@ -35,7 +35,7 @@ class UserController extends Controller
     public function show($id) {
         return [
             'status' => 'success',
-            'data' => User::findOrFail($id)
+            'data' => User::with('dealer', 'sales')->LfindOrFail($id)
         ];
     }
 
@@ -47,10 +47,8 @@ class UserController extends Controller
             'phone'  => 'required',
         ]);
         try {
-            if ($this->request->file('photo')->isValid()) {
-                $filename = url('avatar').'/'.date("dmyhis").$this->request->file('photo')->getClientOriginalName();
-                $this->request->file('photo')
-                ->move(base_path('public/avatar'), $filename);
+            if ($this->request->has('photo')) {
+                $filename = $this->request->photo;
             }else{
                 $filename = $user->photo;
             }
@@ -94,7 +92,7 @@ class UserController extends Controller
     }
 
     public function profile() {
-        $user = $this->request->auth;
+        $user = $this->user->with('sales', 'dealer')->findOrFail($this->request->auth->id);
         return [
             'status' => 'success',
             'data' => $user
