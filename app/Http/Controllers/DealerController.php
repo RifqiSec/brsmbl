@@ -65,12 +65,16 @@ class DealerController extends Controller
         ];
     }
 
-    public function salesList($is_approved = 1){
+    public function salesList(){
         $dealerId = $this->dealer->where('user_id', $this->request->auth->id)->first()->id;
         return [
             'status' => 'success',
             'data' => $this->user->whereHas('sales', function ($q) use ($dealerId){
                 $q->where('dealer_id', $dealerId);
+                $status = ($this->request->has('status')) ? $this->request->status:'active'; 
+                if ($status == 'active') $q->where('is_active', 1)->where('deleted_at', null);
+                if ($status == 'pending') $q->where('is_active', 0)->where('deleted_at', null);
+                if ($status == 'inactive') $q->where('deleted_at', '!=', null);
             })->paginate(10)
         ];
         
@@ -155,6 +159,18 @@ class DealerController extends Controller
         return [
             'status' => 'success',
             'message' => 'Sales has been approved.'
+        ];
+    }
+
+    public function salesReject(){
+        $sales = $this->user->with('sales')
+        ->findOrFail($this->request->sales_pending_id);
+
+        $sales->sales()->updateExistingPivot($this->request->dealer_id, ['deleted_at' => date('Y-m-d h:i:s')]);
+
+        return [
+            'status' => 'success',
+            'message' => 'Sales has been reject.'
         ];
     }
 
