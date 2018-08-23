@@ -97,6 +97,7 @@ class DealerController extends Controller
             'address' => $this->request->address,
             'city_id' => $this->request->city_id,
             'user_id' => $user->id,
+            'telepon' => ($this->request->telepon != '') ? $this->request->telepon:'',
         ]);
 
         return $this->dealer;
@@ -105,7 +106,7 @@ class DealerController extends Controller
     public function update($id) {
         $dealer = $this->dealer->findOrFail($id);
         try {
-            $dealer->update($this->request->only(['fullname', 'email', 'nik', 'noaccount', 'phone', 'photo', 'warning', 'token', 'role']));
+            $dealer->update($this->request->only(['fullname', 'email', 'nik', 'noaccount', 'phone', 'telepon', 'photo', 'warning', 'token', 'role']));
         } catch (Exception $e) {
             return [
                 'status' => 'failed',
