@@ -30,11 +30,14 @@ $router->get('brand', function(Request $request) {
 });
 
 $router->get('dealer', function(Request $request) {
+	$city = ($request->has('city')) ? $request->city : '';
 	return [
 		'status' => 'success',
 		'data' => App\Dealer::select('id', 'name', 'city_id')
 		->with('city')
+		->where('city_id', $city)
 		->where('name', 'like', '%'.$request->get('\\param').'%')
+		->where('id', 'like', '%'.$request->get('\\param').'%')
 		->get()
 		->map(function($item) {
 			return [

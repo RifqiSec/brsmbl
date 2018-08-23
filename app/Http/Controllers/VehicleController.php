@@ -33,7 +33,7 @@ class VehicleController extends Controller
         }
         return [
             'status' => 'success',
-            'data' => $this->vehicle->paginate(10)
+            'data' => $this->vehicle->latest()->paginate(10)
         ];
     }
 

@@ -35,7 +35,7 @@ class UserController extends Controller
     public function show($id) {
         return [
             'status' => 'success',
-            'data' => User::with('dealer', 'sales')->LfindOrFail($id)
+            'data' => User::with('dealer', 'sales')->findOrFail($id)
         ];
     }
 

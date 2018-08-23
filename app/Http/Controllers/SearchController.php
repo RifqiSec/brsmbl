@@ -67,7 +67,7 @@ class SearchController extends Controller
 
         return [
             'status' => 'success',
-            'data' => $this->vehicle->select('id', 'name', 'harga', 'engine', 'gear_box', 'photo', 'vehicle_brand_id', 'vehicle_type_id')->with('type','brand', 'dealer')->withCount('dealer')->paginate(10),
+            'data' => $this->vehicle->select('id', 'name', 'harga', 'engine', 'gear_box', 'photo', 'vehicle_brand_id', 'vehicle_type_id')->with('type','brand', 'dealer')->withCount('dealer')->latest()->paginate(10),
         ];
     }
 }

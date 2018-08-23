@@ -32,7 +32,7 @@ class TokenController extends Controller
     public function index() {
         return [
             'status' => 'success',
-            'data' => $this->tokenHistory->where('user_id', $this->request->auth->id)->paginate(10),
+            'data' => $this->tokenHistory->where('user_id', $this->request->auth->id)->latest()->paginate(10),
         ];
     }
 

@@ -32,7 +32,7 @@ class DealerController extends Controller
     public function index() {
         return [
             'status' => 'success',
-            'data' => $this->dealer->paginate(10)
+            'data' => $this->dealer->latest()->paginate(10)
         ];
     }
 
@@ -48,7 +48,7 @@ class DealerController extends Controller
             'status' => 'success',
             'data' => $this->vehicle->whereHas('dealer', function($q) {
                 $q->where('user_id', $this->request->auth->id);
-            })->paginate(10)
+            })->latest()->paginate(10)
         ];
         
     }
@@ -75,7 +75,7 @@ class DealerController extends Controller
                 if ($status == 'active') $q->where('is_active', 1)->where('deleted_at', null);
                 if ($status == 'pending') $q->where('is_active', 0)->where('deleted_at', null);
                 if ($status == 'inactive') $q->where('deleted_at', '!=', null);
-            })->paginate(10)
+            })->latest()->paginate(10)
         ];
         
     }
@@ -142,6 +142,7 @@ class DealerController extends Controller
         ->select('id', 'name')
         ->where('user_id', $this->request->auth->id)
         ->has('salesPending')->with('salesPending')
+        ->latest()
         ->get();
 
         return [

@@ -40,7 +40,7 @@ class TransactionController extends Controller
             'data' => $this->offer->with('request.vehicle.brand', 'sales', 'dealer')
             ->whereHas('request', function($query) {
                 $query->where('user_id', $this->request->auth->id);
-            })->paginate(10)
+            })->latest()->paginate(10)
         ];
     }
 
@@ -49,6 +49,7 @@ class TransactionController extends Controller
             'status' => 'success',
             'data' => $this->requestTrx->with('vehicle.brand', 'offers')
             ->where('user_id', $this->request->auth->id)
+            ->latest()
             ->paginate(10)
         ];
     }
@@ -65,6 +66,7 @@ class TransactionController extends Controller
             }
         ])
         ->with('city')
+        ->latest()
         ->paginate(10);
 
         return [
@@ -93,7 +95,7 @@ class TransactionController extends Controller
         ->whereHas('sales', function ($q) {
             $q->where('token', '<=', 1);
         })
-        ->with('sales')->paginate(10);
+        ->with('sales')->latest()->paginate(10);
 
         return [
             'status' => 'success',
