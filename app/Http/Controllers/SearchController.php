@@ -64,7 +64,7 @@ class SearchController extends Controller
                 $query->where('city_id', $this->request->get('area'));
             });
         }
-
+        $this->vehicle->update(['search' => \DB::raw('search+1')]);
         return [
             'status' => 'success',
             'data' => $this->vehicle->select('id', 'name', 'harga', 'engine', 'gear_box', 'photo', 'vehicle_brand_id', 'vehicle_type_id')->with('type','brand', 'dealer')->withCount('dealer')->latest()->paginate(10),

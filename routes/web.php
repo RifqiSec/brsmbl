@@ -25,17 +25,29 @@ $router->get('city', function(Request $request) {
 $router->get('brand', function(Request $request) {
 	return [
 		'status' => 'success',
-		'data' => App\VehicleBrand::select('id', 'name')->where('name', 'like', '%'.$request->get('param').'%')->get()
+		'data' => App\VehicleBrand::select('id', 'name')
+		->where('name', 'like', '%'.$request->get('param').'%')
+		->where('type', ($request->has('jenis')) ? $request->jenis : 'like', '%%')
+		->get()
+	];
+});
+
+$router->get('model', function(Request $request) {
+	return [
+		'status' => 'success',
+		'data' => App\Vehicle::select('id', 'name')
+		->where('name', 'like', '%'.$request->get('param').'%')
+		->where('vehicle_brand_id', ($request->has('brand')) ? $request->brand : 'like', '%%')
+		->get()
 	];
 });
 
 $router->get('dealer', function(Request $request) {
-	$city = ($request->has('city')) ? $request->city : '';
 	return [
 		'status' => 'success',
 		'data' => App\Dealer::select('id', 'name', 'city_id')
 		->with('city')
-		->where('city_id', $city)
+		->where('city_id', ($request->has('city')) ? $request->city : 'like','%%')
 		->where('name', 'like', '%'.$request->get('\\param').'%')
 		->where('id', 'like', '%'.$request->get('\\param').'%')
 		->get()
