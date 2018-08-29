@@ -32,23 +32,16 @@ class SearchController extends Controller
 
         if($this->request->get('brand') != '') {
             $this->vehicle = $this->vehicle->whereHas('brand', function ($query) {
-                $query->where('name', $this->request->get('brand'));
+                $query->where('id', $this->request->get('brand'));
             });
         }
 
         if($this->request->get('model') != '') {
-            if ($this->request->get('model') == 'automatic') {
-                $model = 'A/T';
-            }elseif ($this->request->get('model') == 'manual') {
-                $model = 'M/T';
-            }else{
-                $model = 'hybird';
-            }
-            $this->vehicle = $this->vehicle->where('gear_box', $model);
+            $this->vehicle = $this->vehicle->where('id', $this->request->get('model'));
         }
 
         if($this->request->get('type') != '') {
-            $this->vehicle = $this->vehicle->where('fuel', $this->request->get('type'));
+            // $this->vehicle = $this->vehicle->where('fuel', $this->request->get('type'));
         }
 
         if($this->request->get('min') != '') {
