@@ -66,10 +66,10 @@ class DealerController extends Controller
 
     public function salesList(){
         $dealerId = $this->dealer->where('user_id', $this->request->auth->id)->first()->id;
+        $status = ($this->request->has('status')) ? $this->request->get('status'):'active'; 
+
         return [
             'status' => 'success',
-            $status = ($this->request->has('status')) ? $this->request->get('status'):'active'; 
-
             'data' => $this->user->whereHas('sales', function ($q) use ($dealerId, $status){
                 $q->where('dealer_id', $dealerId);
                 if ($status == 'active') $q->where('is_active', 1)->where('deleted_at', null);
