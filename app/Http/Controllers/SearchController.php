@@ -63,7 +63,7 @@ class SearchController extends Controller
             'data' => $this->vehicle
             ->select('id', 'name', 'harga', 'engine', 'gear_box', 'photo', 'vehicle_brand_id', 'vehicle_type_id')
             ->with('type','brand', 'sales')
-            ->withCount('dealer')
+            ->withCount('sales')
             ->latest()
             ->paginate(10),
         ];
