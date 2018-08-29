@@ -28,8 +28,6 @@ class SearchController extends Controller
     }
 
     public function index() {
-        $this->vehicle = $this->vehicle->has('dealer');
-
         if($this->request->get('brand') != '') {
             $this->vehicle = $this->vehicle->whereHas('brand', function ($query) {
                 $query->where('id', $this->request->get('brand'));
