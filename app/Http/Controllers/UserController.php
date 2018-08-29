@@ -111,7 +111,7 @@ class UserController extends Controller
     public function addVehicle(){
         $user = $this->user->find($this->request->auth->id);
 
-        $v = collect(explode(",", $this->request->vehicleid));
+        $v = collect(array_map('intval', explode(',', $this->request->vehicle)));
         $user->vehicle()->sync($v);
 
         return [
