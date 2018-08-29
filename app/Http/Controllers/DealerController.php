@@ -68,9 +68,10 @@ class DealerController extends Controller
         $dealerId = $this->dealer->where('user_id', $this->request->auth->id)->first()->id;
         return [
             'status' => 'success',
-            'data' => $this->user->whereHas('sales', function ($q) use ($dealerId){
+            $status = ($this->request->has('status')) ? $this->request->get('status'):'active'; 
+
+            'data' => $this->user->whereHas('sales', function ($q) use ($dealerId, $status){
                 $q->where('dealer_id', $dealerId);
-                $status = ($this->request->has('status')) ? $this->request->get('status'):'active'; 
                 if ($status == 'active') $q->where('is_active', 1)->where('deleted_at', null);
                 if ($status == 'pending') $q->where('is_active', 0)->where('deleted_at', null);
                 if ($status == 'inactive') $q->where('deleted_at', '!=', null);
