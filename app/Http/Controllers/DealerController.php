@@ -80,7 +80,7 @@ class DealerController extends Controller
         
     }
 
-    public function inactiveSales(){
+    public function salesInactive(){
         $dealerId = $this->dealer->where('user_id', $this->request->auth->id)->first()->id;
 
         return [
