@@ -80,6 +80,18 @@ class DealerController extends Controller
         
     }
 
+    public function inactiveSales(){
+        $dealerId = $this->dealer->where('user_id', $this->request->auth->id)->first()->id;
+
+        return [
+            'status' => 'success',
+            'data' => $this->user->whereHas('sales', function ($q) use ($dealerId){
+                $q->where('dealer_id', $dealerId);
+                $q->where('deleted_at', '!=', null);
+            })->latest()->paginate(10)
+        ];
+    }
+
     public function create($user) {
 
         $this->validate($this->request, [
