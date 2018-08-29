@@ -66,8 +66,8 @@ class DealerController extends Controller
 
     public function salesList(){
         $dealerId = $this->dealer->where('user_id', $this->request->auth->id)->first()->id;
-        $status = ($this->request->has('status')) ? $this->request->get('status'):'active'; 
-
+        $status = ($this->request->has('status')) ? $this->request->status:'active'; 
+        
         return [
             'status' => 'success',
             'data' => $this->user->whereHas('sales', function ($q) use ($dealerId, $status){
