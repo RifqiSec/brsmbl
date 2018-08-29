@@ -53,14 +53,19 @@ class SearchController extends Controller
         }
 
         if($this->request->get('area') != '') {
-            $this->vehicle = $this->vehicle->whereHas('dealer.city', function ($query) {
+            $this->vehicle = $this->vehicle->whereHas('sales.dealer.city', function ($query) {
                 $query->where('city_id', $this->request->get('area'));
             });
         }
         $this->vehicle->update(['search' => \DB::raw('search+1')]);
         return [
             'status' => 'success',
-            'data' => $this->vehicle->select('id', 'name', 'harga', 'engine', 'gear_box', 'photo', 'vehicle_brand_id', 'vehicle_type_id')->with('type','brand', 'dealer')->withCount('dealer')->latest()->paginate(10),
+            'data' => $this->vehicle
+            ->select('id', 'name', 'harga', 'engine', 'gear_box', 'photo', 'vehicle_brand_id', 'vehicle_type_id')
+            ->with('type','brand', 'sales')
+            ->withCount('dealer')
+            ->latest()
+            ->paginate(10),
         ];
     }
 }

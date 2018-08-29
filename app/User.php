@@ -35,6 +35,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->belongsToMany('App\Dealer', 'user_sales')->withPivot('is_active');
     }
 
+    public function city()
+    {
+        return $this->belongsTo('App\City');
+    }
+
 
     public function dealer()
     {

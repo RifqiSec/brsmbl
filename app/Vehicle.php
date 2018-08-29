@@ -28,4 +28,8 @@ class Vehicle extends Model
         return $this->belongsToMany('App\Dealer', 'dealer_vehicle');
     }
 
+    public function sales(){
+        return $this->belongsToMany('App\User', 'sales_vehicles', 'sales_id', 'vehicle_id');
+    }
+
 }
