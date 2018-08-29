@@ -7,6 +7,7 @@ use App\RequestTrx;
 use App\Offer;
 use App\Dealer;
 use App\User;
+use App\Transaction;
 use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
 class TransactionController extends Controller 
@@ -23,11 +24,12 @@ class TransactionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return void
      */
-    public function __construct(Request $request, RequestTrx $requestTrx, Offer $offer, Dealer $dealer, User $user) {
+    public function __construct(Request $request, RequestTrx $requestTrx, Offer $offer, Dealer $dealer, User $user, Transaction $transaction) {
         $this->request = $request;
         $this->requestTrx = $requestTrx;
         $this->offer = $offer;
         $this->dealer = $dealer;
+        $this->transaction = $transaction;
         $this->user = $user;
     }
 
@@ -131,6 +133,11 @@ class TransactionController extends Controller
 
         public function saveOrder() {
         // going to be save request and brodcast to sales by function on declare before 
+
+            $offer = $this->request->offerid;
+            $user = $this->request->auth->id;
+
+            
         }
 
     }

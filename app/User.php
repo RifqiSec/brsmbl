@@ -45,4 +45,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         return $this->hasMany('App\TokenHistory');
     }
+
+    public function vehicle()
+    {
+        return $this->belongsToMany('App\Vehicle', 'sales_vehicles', 'sales_id');
+    }
 }

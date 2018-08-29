@@ -20,4 +20,9 @@ class Offer extends Model
 	{
 		return $this->belongsTo('App\Dealer');
 	}
+
+	public function transaction()
+	{
+		return $this->hasMany('App\Transaction');
+	}
 }

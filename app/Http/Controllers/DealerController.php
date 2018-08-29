@@ -56,9 +56,8 @@ class DealerController extends Controller
     public function addVehicle(){
         $dealer = $this->dealer->where('user_id', $this->request->auth->id)->first();
         $vehicleid = explode(",", $this->request->vehicleid);
-        collect($vehicleid)->map(function($item) use ($dealer){
-            $dealer->vehicle()->attach($item);
-        });
+        $dealer->vehicle()->sync(collect($vehicleid));
+
         return [
             'status' => 'success',
             'data' => ''

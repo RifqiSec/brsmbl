@@ -73,6 +73,10 @@ $router->group(['middleware' => 'jwt.auth'], function() use ($router) {
 	$router->post('user/{id}','UserController@update');
 	$router->delete('user/{id}','UserController@destroy');
 
+	$router->get('vehicle','UserController@vehicle');
+	$router->post('vehicle','UserController@addVehicle');
+
+
 
 	$router->get('inbox','InboxController@index');
 	$router->post('inbox','InboxController@create');
@@ -90,6 +94,7 @@ $router->group(['middleware' => 'jwt.auth'], function() use ($router) {
 
 
 	$router->get('sales','DealerController@salesList');
+	$router->get('report','ReportController@sales');
 
 	$router->get('dealer/vehicle','DealerController@vehicleList');
 	$router->post('dealer/vehicle','DealerController@addVehicle');

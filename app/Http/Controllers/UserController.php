@@ -99,6 +99,28 @@ class UserController extends Controller
         ];
     }
 
+    public function vehicle(){
+        $user = $this->user->with('vehicle')->find($this->request->auth->id);
+
+        return [
+            'status' => 'success',
+            'data' => $user
+        ];
+    }
+
+    public function addVehicle(){
+        $user = $this->user->find($this->request->auth->id);
+
+        $v = collect(explode(",", $this->request->vehicleid));
+        $user->vehicle()->sync($v);
+
+        return [
+            'status' => 'success',
+            'data' => $user->vehicle
+        ];
+
+    }
+
 
 
 }
