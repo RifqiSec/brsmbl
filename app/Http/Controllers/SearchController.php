@@ -51,7 +51,7 @@ class SearchController extends Controller
         }
 
         if($this->request->get('area') != '') {
-            $this->vehicle = $this->vehicle->whereHas('sales.dealer.city', function ($query) {
+            $this->vehicle = $this->vehicle->whereHas('sales.sales.dealer.city', function ($query) {
                 $query->where('city_id', $this->request->get('area'));
             });
         }
@@ -60,7 +60,7 @@ class SearchController extends Controller
             'status' => 'success',
             'data' => $this->vehicle
             ->select('id', 'name', 'harga', 'engine', 'gear_box', 'photo', 'vehicle_brand_id', 'vehicle_type_id')
-            ->with('type','brand', 'sales')
+            ->with('brand', 'sales')
             ->withCount('sales')
             ->latest()
             ->paginate(10),
