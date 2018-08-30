@@ -28,31 +28,35 @@ class SearchController extends Controller
     }
 
     public function index() {
-        if($this->request->get('brand') != '') {
-            $this->vehicle = $this->vehicle->whereHas('brand', function ($query) {
-                $query->where('id', $this->request->get('brand'));
+        $req = [];
+        foreach($this->request->all() as $key => $value) {
+            $req[str_replace("\\", '', $key)] = $value;
+        }
+        if(isset($req['brand'])) {
+            $this->vehicle = $this->vehicle->whereHas('brand', function ($query) use ($req) {
+                $query->where('id', $req['brand']);
             });
         }
 
-        if($this->request->get('model') != '') {
-            $this->vehicle = $this->vehicle->where('id', $this->request->get('model'));
+        if(isset($req['model'])) {
+            $this->vehicle = $this->vehicle->where('id', $req['model']);
         }
 
-        if($this->request->get('type') != '') {
-            // $this->vehicle = $this->vehicle->where('fuel', $this->request->get('type'));
+        if(isset($req['type'])) {
+            // $this->vehicle = $this->vehicle->where('fuel', $req['type']);
         }
 
-        if($this->request->get('min') != '') {
-            $this->vehicle = $this->vehicle->where('harga', '>=', $this->request->get('min'));
+        if(isset($req['min'])) {
+            $this->vehicle = $this->vehicle->where('harga', '>=', $req['min']);
         }
 
-        if($this->request->get('max') != '') {
-            $this->vehicle = $this->vehicle->where('harga', '<=', $this->request->get('max'));
+        if(isset($req['max'])) {
+            $this->vehicle = $this->vehicle->where('harga', '<=', $req['max']);
         }
 
-        if($this->request->get('area') != '') {
-            $this->vehicle = $this->vehicle->whereHas('sales.sales.city', function ($query) {
-                $query->where('city_id', $this->request->get('area'));
+        if(isset($req['area'])) {
+            $this->vehicle = $this->vehicle->whereHas('sales.sales.city', function ($query) use ($req){
+                $query->where('city_id', $req['area']);
             });
         }
         $this->vehicle->update(['search' => \DB::raw('search+1')]);
