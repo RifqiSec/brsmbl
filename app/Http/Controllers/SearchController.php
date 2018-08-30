@@ -51,7 +51,7 @@ class SearchController extends Controller
         }
 
         if($this->request->get('area') != '') {
-            $this->vehicle = $this->vehicle->whereHas('sales.sales.dealer.city', function ($query) {
+            $this->vehicle = $this->vehicle->whereHas('sales.sales.city', function ($query) {
                 $query->where('city_id', $this->request->get('area'));
             });
         }
