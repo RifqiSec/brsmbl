@@ -40,7 +40,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->belongsTo('App\City');
     }
 
-
     public function dealer()
     {
         return $this->hasMany('App\Dealer');
