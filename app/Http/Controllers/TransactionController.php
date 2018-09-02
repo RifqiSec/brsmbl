@@ -189,7 +189,7 @@ class TransactionController extends Controller
         }
 
         public function selectSales($request) {
-            $sales = $this->request->sales_id;
+            $sales = array_map('intval', explode(',', $this->request->sales_id));
 
             if($this->user->find($this->request->auth->id)->token <= count($sales)) {
                 return [
