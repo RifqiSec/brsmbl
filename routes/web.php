@@ -10,6 +10,7 @@ $router->post('auth/login','AuthController@authenticate');
 $router->post('auth/register','AuthController@register');
 
 $router->get('vehicles','VehicleController@index');
+$router->get('vehicle/{vehicleid}','VehicleController@show');
 $router->get('search','SearchController@index');
 $router->get('dealer','DealerController@index');
 $router->get('dealer/show/{dealerid}','DealerController@show');
@@ -81,7 +82,15 @@ $router->group(['middleware' => 'jwt.auth'], function() use ($router) {
 	$router->get('inbox','InboxController@index');
 	$router->post('inbox','InboxController@create');
 	$router->get('transaction','TransactionController@index');
+	$router->post('request/sales','TransactionController@requestSales');
 	$router->post('sales/select','TransactionController@selectSales');
+
+	$router->post('offering','TransactionController@offering');
+
+	$router->get('offerList/{requestid}', 'TransactionController@offerList');
+	$router->get('successOfferList/{requestid}', 'TransactionController@successOfferList');
+	$router->get('requestList', 'TransactionController@requestList');
+	$router->post('acceptOffer', 'TransactionController@acceptOffer');
 
 
 	$router->get('sales/pending','DealerController@salesPending');

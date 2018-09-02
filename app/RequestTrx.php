@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class RequestTrx extends Model
 {
 	protected $table = 'requests';
-	// protected $fillable = ['from', 'to', 'message', 'type'];
+	protected $fillable = ['user_id', 'vehicle_id', 'city_id', 'color', 'qty', 'payment_method', 'dp', 'installment'];
 
 	public function offers() {
-		return $this->belongsTo('App\Offer');
+		return $this->hasMany('App\Offer', 'request_id');
 	}
 
 	public function vehicle()

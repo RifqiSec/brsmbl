@@ -79,9 +79,90 @@ class TransactionController extends Controller
             ];
         }
 
-        public function offering()
+        public function requestSales(){
+           $request = $this->requestTrx->create([
+                'user_id' => $this->request->auth->id,
+                'vehicle_id' => $this->request->vehicleid,
+                'city_id' => $this->request->cityid,
+                'color' => $this->request->color,
+                'qty' => $this->request->qty,
+                'payment_method' => $this->request->payment_method,
+                'dp' => ($this->request->dp !== '') ? $this->request->dp : '',
+                'installment' => ($this->request->installment !== '') ? $this->request->installment : '',
+            ]);
+
+           return $this->selectSales($request->id);
+        }
+
+        public function offering(){
+            $offer = $this->offer->create([
+                'sales_id' => $this->request->auth->id,
+                'request_id' => $this->request->requestid,
+                'dealer_id' => $this->request->dealerid,
+                'expired_date' => $this->request->expired_date,
+                'tdp' => ($this->request->tdp !== '') ? $this->request->tdp : '',
+                'installment' => ($this->request->installment !== '') ? $this->request->installment : '',
+                'tenor' => ($this->request->tenor !== '') ? $this->request->tenor : '',
+                'availibillity' => $this->request->availibillity,
+                'promo' => $this->request->promo,
+                'tnc' => $this->request->tnc,
+                'description' => $this->request->description,
+                'status' => 'offered',
+                'installment' => ($this->request->installment !== '') ? $this->request->installment : '',
+            ]);
+
+            return [
+                'status' => 'success',
+                'data' => ''
+            ]; 
+        }
+
+        //sales
+        public function offerList($requestid)
         {
-        # code...
+            $offer  = $this->offer->where(['request_id' => $requestid])->get();
+            return [
+                'status' => 'success',
+                'data' => $offer
+            ]; 
+
+        }
+         //sales
+         public function successOfferList($requestid)
+         {
+             $offer  = $this->offer->where(['request_id' => $requestid, 'status' => 'success'])->with('sales')->get();
+             return [
+                 'status' => 'success',
+                 'data' => $offer
+             ]; 
+ 
+         }
+
+        //sales
+        public function requestList()
+        {
+           return [
+                'status' => 'success',
+                'data' => $this->requestTrx->where('user_id', $this->request->auth->id)->withCount('offers as offering')->get()
+           ];
+        }
+
+        //sales
+        public function acceptOffer()
+        {
+            $offer = $this->offer->find($this->request->offerid);
+
+            $offer->update(['status' => 'success']);
+
+            $this->transaction->create([
+                'offer_id' => $offer->id,
+                'user_id' => $this->request->auth->id
+            ]);
+
+            return [
+                'status' => 'success',
+                'data' => $offer->sales
+            ];
         }
 
         public function show($id) {
@@ -107,11 +188,10 @@ class TransactionController extends Controller
             ];
         }
 
-        public function selectSales() {
+        public function selectSales($request) {
             $sales = $this->request->sales_id;
-            $request = $this->request->request_id;
 
-            if($this->user->find($this->request->auth->id)->token < count($sales)) {
+            if($this->user->find($this->request->auth->id)->token <= count($sales)) {
                 return [
                     'status' => 'failed',
                     'message' => 'Token tidak cukup'
